@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
+import 'package:gsg_todo_sqlite_provider/helpers/theme_helper.dart';
 import 'package:gsg_todo_sqlite_provider/models/task_model.dart';
+import 'package:gsg_todo_sqlite_provider/providers/theme_provider.dart';
 import 'package:gsg_todo_sqlite_provider/providers/todo_provider.dart';
 import 'package:gsg_todo_sqlite_provider/ui/pages/all_tasks.dart';
 import 'package:gsg_todo_sqlite_provider/ui/pages/completed_tasks.dart';
@@ -11,20 +13,27 @@ class MainPage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     // TODO: implement build
-    // return Consumer<TodoProvider>(builder: (context, todoProvider, x) {
+    return Consumer<ThemeProvider>(
+        builder: (context, provider, x) => MaterialApp(
+              theme: provider.themeData,
+              home: HomePage(),
+            ));
+
+    // return Selector<TodoProvider, List<TaskModel>>(builder: (context, data, x) {
     //   return DefaultTabController(
     //     length: 3,
     //     child: Scaffold(
     //       appBar: AppBar(
     //         actions: [
     //           IconButton(
-    //               onPressed: () {
-    //                 Navigator.of(context)
-    //                     .push(MaterialPageRoute(builder: (context) {
-    //                   return NewTaskPage();
-    //                 }));
-    //               },
-    //               icon: Icon(Icons.add))
+    //             onPressed: () {
+    //               Navigator.of(context)
+    //                   .push(MaterialPageRoute(builder: (context) {
+    //                 return NewTaskPage();
+    //               }));
+    //             },
+    //             icon: Icon(Icons.add),
+    //           ),
     //         ],
     //         title: Text('Todo App'),
     //         bottom: TabBar(isScrollable: true, tabs: [
@@ -39,7 +48,7 @@ class MainPage extends StatelessWidget {
     //           ),
     //         ]),
     //       ),
-    //       body: todoProvider.allTasks == null
+    //       body: data == null
     //           ? Center(
     //               child: CircularProgressIndicator(),
     //             )
@@ -50,22 +59,39 @@ class MainPage extends StatelessWidget {
     //             ]),
     //     ),
     //   );
+    // }, selector: (context, provider) {
+    //   return provider.allTasks;
     // });
+  }
+}
 
-    return Selector<TodoProvider, List<TaskModel>>(builder: (context, data, x) {
-      return DefaultTabController(
+class HomePage extends StatelessWidget {
+  @override
+  Widget build(BuildContext context) {
+    return Consumer2<TodoProvider, ThemeProvider>(
+      builder: (context, todoProvider, provider, x) => DefaultTabController(
         length: 3,
         child: Scaffold(
           appBar: AppBar(
             actions: [
               IconButton(
-                  onPressed: () {
-                    Navigator.of(context)
-                        .push(MaterialPageRoute(builder: (context) {
-                      return NewTaskPage();
-                    }));
-                  },
-                  icon: Icon(Icons.add))
+                onPressed: () {
+                  Navigator.of(context)
+                      .push(MaterialPageRoute(builder: (context) {
+                    return NewTaskPage();
+                  }));
+                },
+                icon: Icon(Icons.add),
+              ),
+              Switch(
+                  value: provider.themeData == ThemeHelper.lightTheme,
+                  onChanged: (value) {
+                    if (value) {
+                      provider.setThemeData(MyThemeMode.light);
+                    } else {
+                      provider.setThemeData(MyThemeMode.dark);
+                    }
+                  })
             ],
             title: Text('Todo App'),
             bottom: TabBar(isScrollable: true, tabs: [
@@ -80,7 +106,7 @@ class MainPage extends StatelessWidget {
               ),
             ]),
           ),
-          body: data == null
+          body: todoProvider.allTasks == null
               ? Center(
                   child: CircularProgressIndicator(),
                 )
@@ -90,9 +116,7 @@ class MainPage extends StatelessWidget {
                   InCompleteTasks(),
                 ]),
         ),
-      );
-    }, selector: (context, provider) {
-      return provider.allTasks;
-    });
+      ),
+    );
   }
 }

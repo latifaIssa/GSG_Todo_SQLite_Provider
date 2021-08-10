@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:gsg_todo_sqlite_provider/helpers/db_helper.dart';
+import 'package:gsg_todo_sqlite_provider/providers/theme_provider.dart';
 import 'package:gsg_todo_sqlite_provider/providers/todo_provider.dart';
 import 'package:gsg_todo_sqlite_provider/ui/pages/main_page.dart';
 import 'package:provider/provider.dart';
@@ -7,9 +8,19 @@ import 'package:provider/provider.dart';
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
   await DbHelper.dbHelper.initDatabase();
-  runApp(ChangeNotifierProvider<TodoProvider>(
-      create: (context) => TodoProvider(),
-      child: MaterialApp(home: MainPage())));
+  runApp(
+    MultiProvider(
+      providers: [
+        ChangeNotifierProvider<TodoProvider>(
+          create: (context) => TodoProvider(),
+        ),
+        ChangeNotifierProvider<ThemeProvider>(
+          create: (context) => ThemeProvider(),
+        ),
+      ],
+      child: MainPage(),
+    ),
+  );
 }
 
 class MyApp extends StatelessWidget {
