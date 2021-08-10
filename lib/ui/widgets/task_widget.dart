@@ -39,5 +39,41 @@ class TaskWidget extends StatelessWidget {
         ),
       );
     });
+
+    // return Selector<TodoProvider, List<TaskModel>>(builder: (context, data, x) {
+    //   return ListView.builder(
+    //       itemCount: data.length,
+    //       itemBuilder: (context, index) {
+    //          return Container(
+    //     decoration: BoxDecoration(
+    //         borderRadius: BorderRadius.circular(15),
+    //         color: taskModel.isComplete ? Colors.green : Colors.redAccent),
+    //     margin: EdgeInsets.all(10),
+    //     padding: EdgeInsets.all(10),
+    //     child: Row(
+    //       children: [
+    //         Checkbox(
+    //             value: taskModel.isComplete,
+    //             onChanged: (v) {
+    //               taskModel.isComplete = v;
+    //               todoProvider.updateTask(taskModel);
+    //             }),
+    //         SizedBox(
+    //           width: 10,
+    //         ),
+    //         Text(taskModel.taskName),
+    //         Spacer(),
+    //         IconButton(
+    //             onPressed: () {
+    //               todoProvider.deleteTask(taskModel);
+    //             },
+    //             icon: Icon(Icons.delete))
+    //       ],
+    //     ),
+    //   );
+    //       });
+    // }, selector: (context, provider) {
+    //   return provider.allTasks;
+    // });
   }
 }
